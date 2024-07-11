@@ -403,4 +403,98 @@ public class Main {
         System.out.println();
     }
 }
+########################
+
+import java.util.*;
+
+class Node {
+    int num;
+    Node next;
+
+    Node(int a) {
+        num = a;
+        next = null;
+    }
+}
+
+public class Main {
+    static Node insertNode(Node head, int val) {
+        Node newNode = new Node(val);
+        if (head == null) {
+            head = newNode;
+            return head;
+        }
+        Node temp = head;
+        while (temp.next != null)
+            temp = temp.next;
+        temp.next = newNode;
+        return head;
+    }
+
+    static Node rotateright(Node head, int k) {
+        if (head == null || head.next == null)
+            return head;
+
+        // Find the length of the list
+        int length = 1;
+        Node temp = head;
+        while (temp.next != null) {
+            length++;
+            temp = temp.next;
+        }
+
+        // Make the list circular
+        temp.next = head;
+
+        // Find the new head after rotation
+        k = k % length;
+        int stepsToNewHead = length - k;
+        Node newTail = head;
+        for (int i = 1; i < stepsToNewHead; i++) {
+            newTail = newTail.next;
+        }
+
+        Node newHead = newTail.next;
+        newTail.next = null;
+
+        return newHead;
+    }
+
+    static void printList(Node head) {
+        Node temp = head;
+        while (temp != null) {
+            System.out.print(temp.num + " ");
+            temp = temp.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Node head = null;
+
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            int val = sc.nextInt();
+            if (val == -1) {
+                break;
+            }
+            head = insertNode(head, val);
+        }
+          
+
+        System.out.println("Given linked list:");
+        printList(head);
+
+        // Rotate the list by k nodes
+      int k1 = sc.nextInt();
+      int k2 = k1 - 1;
+      
+        int k = k1-k2;
+        head = rotateright(head, k);
+
+        System.out.println("Rotated Linked list:");
+        printList(head);
+    }
+}
+
 
