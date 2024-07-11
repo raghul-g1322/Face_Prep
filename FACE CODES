@@ -663,3 +663,65 @@ public class Main {
         scanner.close();
     }
 }
+############## CALCULATOR ############
+
+import java.util.*;
+
+public class Main
+{
+    
+    // Function to evaluate basic calculator expression
+    public static int calculate(String s) {
+        Stack<Integer> stack = new Stack<>();
+        int num = 0;
+        int result = 0;
+        int sign = 1; // 1 for positive sign, -1 for negative sign
+        
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            
+            if (Character.isDigit(c)) {
+                num = num * 10 + (c - '0');
+            } else if (c == '+') {
+                result += sign * num;
+                num = 0;
+                sign = 1;
+            } else if (c == '-') {
+                result += sign * num;
+                num = 0;
+                sign = -1;
+            } else if (c == '(') {
+                // Push current result and sign onto stack
+                stack.push(result);
+                stack.push(sign);
+                // Reset result and sign for the new sub-expression
+                result = 0;
+                sign = 1;
+            } else if (c == ')') {
+                // Evaluate the current result within parentheses
+                result += sign * num;
+                num = 0;
+                // Multiply by the sign from the stack
+                result *= stack.pop();
+                // Add the previous result from the stack
+                result += stack.pop();
+            }
+        }
+        
+        // Final addition or subtraction for the last number
+        result += sign * num;
+        
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        String expression = scanner.nextLine();
+        
+        int result = calculate(expression);
+        System.out.println(result);
+        
+        scanner.close();
+    }
+}
