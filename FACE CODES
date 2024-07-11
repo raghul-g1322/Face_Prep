@@ -219,3 +219,79 @@ public class Main {
     }
 }
 
+###################### Mergre k sorted array ################
+
+import java.util.PriorityQueue;
+import java.util.Scanner;
+
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+public class Main
+{
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Read the number of linked lists
+        int k = scanner.nextInt();
+        ListNode[] lists = new ListNode[k];
+
+        // Read each linked list
+        for (int i = 0; i < k; i++) {
+            ListNode dummy = new ListNode(0);
+            ListNode tail = dummy;
+            while (true) {
+                int val = scanner.nextInt();
+                if (val == -1) break;
+                tail.next = new ListNode(val);
+                tail = tail.next;
+            }
+            lists[i] = dummy.next;
+        }
+
+        // Merge all linked lists
+        ListNode mergedList = mergeKLists(lists);
+
+        // Print the merged sorted linked list
+        printList(mergedList);
+
+        scanner.close();
+    }
+
+    public static ListNode mergeKLists(ListNode[] lists) {
+        PriorityQueue<ListNode> minHeap = new PriorityQueue<>((a, b) -> a.val - b.val);
+
+        // Add the first node of each list to the priority queue
+        for (ListNode list : lists) {
+            if (list != null) {
+                minHeap.add(list);
+            }
+        }
+
+        ListNode dummy = new ListNode(0);
+        ListNode tail = dummy;
+
+        while (!minHeap.isEmpty()) {
+            ListNode minNode = minHeap.poll();
+            tail.next = minNode;
+            tail = tail.next;
+            if (minNode.next != null) {
+                minHeap.add(minNode.next);
+            }
+        }
+
+        return dummy.next;
+    }
+
+    public static void printList(ListNode head) {
+        ListNode current = head;
+        while (current != null) {
+            System.out.print(current.val + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+}
