@@ -1,0 +1,104 @@
+### 1st
+import java.util.*;
+
+// Definition for a binary tree node.
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    
+    TreeNode(int x) {
+        val = x;
+    }
+}
+
+public class Main {
+    
+    // Function to build a binary tree from array representation (level-order)
+    public TreeNode buildTree(String[] nodes) {
+        if (nodes == null || nodes.length == 0 || nodes[0].equals("N")) {
+            return null;
+        }
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+        queue.offer(root);
+        
+        int index = 1;
+        while (!queue.isEmpty() && index < nodes.length) {
+            TreeNode current = queue.poll();
+            
+            // Left child
+            if (!nodes[index].equals("N")) {
+                current.left = new TreeNode(Integer.parseInt(nodes[index]));
+                queue.offer(current.left);
+            }
+            index++;
+            
+            // Right child
+            if (index < nodes.length && !nodes[index].equals("N")) {
+                current.right = new TreeNode(Integer.parseInt(nodes[index]));
+                queue.offer(current.right);
+            }
+            index++;
+        }
+        
+        return root;
+    }
+    
+    // Function to perform right side view of a binary tree
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size();
+            
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode node = queue.poll();
+                
+                // Add the last node of each level (rightmost node)
+                if (i == levelSize - 1) {
+                    result.add(node.val);
+                }
+                
+                // Add children to the queue
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String inputLine = scanner.nextLine().trim();
+        String[] nodeValues = inputLine.split(" ");
+        
+        Main solution = new Main();
+        TreeNode root = solution.buildTree(nodeValues);
+        
+        List<Integer> result = solution.rightSideView(root);
+        
+        // Print the right view result
+        for (int i = 0; i < result.size(); i++) {
+            if (i > 0) {
+                System.out.print(" ");
+            }
+            System.out.print(result.get(i));
+        }
+        System.out.println();
+        
+        scanner.close();
+    }
+}
