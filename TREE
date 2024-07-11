@@ -102,3 +102,658 @@ public class Main {
         scanner.close();
     }
 }
+------------------------------------------------------------------------------------------------------------------------------------
+####### 2nd
+
+import java.util.*;
+
+class TreeNode {
+    int value;
+    TreeNode left, right;
+    
+    TreeNode(int value) {
+        this.value = value;
+        left = right = null;
+    }
+}
+
+public class Main {
+    
+    static int diameter;
+
+    // Function to build the tree from input
+    public static TreeNode buildTree(String[] nodes) {
+        if (nodes.length == 0 || nodes[0].equals("-1")) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int i = 1;
+
+        while (!queue.isEmpty() && i < nodes.length) {
+            TreeNode current = queue.poll();
+
+            if (i < nodes.length && !nodes[i].equals("-1")) {
+                current.left = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.left);
+            }
+            i++;
+
+            if (i < nodes.length && !nodes[i].equals("-1")) {
+                current.right = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.right);
+            }
+            i++;
+        }
+
+        return root;
+    }
+
+    // Helper function to calculate diameter
+    public static int calculateDiameter(TreeNode node) {
+        if (node == null) return 0;
+
+        int leftDepth = calculateDiameter(node.left);
+        int rightDepth = calculateDiameter(node.right);
+
+        // Update the diameter
+        diameter = Math.max(diameter, leftDepth + rightDepth + 1);
+
+        return Math.max(leftDepth, rightDepth) + 1;
+    }
+
+    // Function to find the diameter of the binary tree
+    public static int findDiameter(TreeNode root) {
+        diameter = 0;
+        calculateDiameter(root);
+        return diameter - 1; // Since the problem defines diameter as number of nodes, we need to subtract 1
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine().trim();
+        String[] nodes = input.split(" ");
+
+        TreeNode root = buildTree(nodes);
+        int result = findDiameter(root);
+
+        System.out.println(result);
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------
+###### 3rd
+
+import java.util.*;
+
+class TreeNode {
+    int value;
+    TreeNode left, right;
+    
+    TreeNode(int value) {
+        this.value = value;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    // Function to build the tree from input
+    public static TreeNode buildTree(String[] nodes) {
+        if (nodes.length == 0 || nodes[0].equals("N")) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int i = 1;
+
+        while (!queue.isEmpty() && i < nodes.length) {
+            TreeNode current = queue.poll();
+
+            if (!nodes[i].equals("N")) {
+                current.left = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.left);
+            }
+            i++;
+
+            if (i >= nodes.length) break;
+
+            if (!nodes[i].equals("N")) {
+                current.right = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.right);
+            }
+            i++;
+        }
+
+        return root;
+    }
+
+    // Function to perform zigzag level order traversal
+    public static List<Integer> zigzagTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) return result;
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        boolean leftToRight = true;
+
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size();
+            List<Integer> levelNodes = new ArrayList<>();
+
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode node = queue.poll();
+                if (leftToRight) {
+                    levelNodes.add(node.value);
+                } else {
+                    levelNodes.add(0, node.value);  // Insert at the beginning for reverse order
+                }
+
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
+
+            result.addAll(levelNodes);
+            leftToRight = !leftToRight;
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine().trim();
+        String[] nodes = input.split(" ");
+
+        TreeNode root = buildTree(nodes);
+        List<Integer> result = zigzagTraversal(root);
+
+        for (int value : result) {
+            System.out.print(value + " ");
+        }
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------
+#### 4th
+
+import java.util.*;
+
+class TreeNode {
+    int value;
+    TreeNode left, right;
+    
+    TreeNode(int value) {
+        this.value = value;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    // Function to build the tree from input
+    public static TreeNode buildTree(String[] nodes) {
+        if (nodes.length == 0 || nodes[0].equals("N")) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int i = 1;
+
+        while (!queue.isEmpty() && i < nodes.length) {
+            TreeNode current = queue.poll();
+
+            if (i < nodes.length && !nodes[i].equals("N")) {
+                current.left = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.left);
+            }
+            i++;
+
+            if (i < nodes.length && !nodes[i].equals("N")) {
+                current.right = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.right);
+            }
+            i++;
+        }
+
+        return root;
+    }
+
+    // Helper function to calculate the sum of root-to-leaf numbers
+    public static int sumRootToLeaf(TreeNode node, int currentSum) {
+        if (node == null) return 0;
+        
+        currentSum = currentSum * 10 + node.value;
+        
+        // If the node is a leaf, return the currentSum
+        if (node.left == null && node.right == null) {
+            return currentSum;
+        }
+        
+        // Recur for left and right subtrees and return the sum
+        return sumRootToLeaf(node.left, currentSum) + sumRootToLeaf(node.right, currentSum);
+    }
+
+    // Function to find the sum of all root-to-leaf numbers
+    public static int sumNumbers(TreeNode root) {
+        return sumRootToLeaf(root, 0);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine().trim();
+
+        if (input.equals("N")) {
+            System.out.println(0);
+            return;
+        }
+        
+        String[] nodes = input.split(" ");
+        TreeNode root = buildTree(nodes);
+        int result = sumNumbers(root);
+
+        System.out.println(result);
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------
+#### 5th
+
+import java.util.*;
+
+class TreeNode {
+    int value;
+    TreeNode left, right;
+    
+    TreeNode(int value) {
+        this.value = value;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    // Function to build the tree from input
+    public static TreeNode buildTree(String[] nodes) {
+        if (nodes.length == 0 || nodes[0].equals("N")) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int i = 1;
+
+        while (!queue.isEmpty() && i < nodes.length) {
+            TreeNode current = queue.poll();
+
+            if (i < nodes.length && !nodes[i].equals("N")) {
+                current.left = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.left);
+            }
+            i++;
+
+            if (i < nodes.length && !nodes[i].equals("N")) {
+                current.right = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.right);
+            }
+            i++;
+        }
+
+        return root;
+    }
+
+    // Function to flatten the binary tree to a linked list
+    public static void flatten(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+
+        flatten(root.left);
+        flatten(root.right);
+
+        TreeNode left = root.left;
+        TreeNode right = root.right;
+
+        root.left = null;
+        root.right = left;
+
+        TreeNode current = root;
+        while (current.right != null) {
+            current = current.right;
+        }
+
+        current.right = right;
+    }
+
+    // Function to perform inorder traversal and print the flattened tree
+    public static void inorderTraversal(TreeNode root) {
+        TreeNode current = root;
+        while (current != null) {
+            System.out.print(current.value + " ");
+            current = current.right;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine().trim();
+        String[] nodes = input.split(" ");
+
+        TreeNode root = buildTree(nodes);
+        flatten(root);
+        inorderTraversal(root);
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+#### 6th
+import java.util.*;
+
+class TreeNode {
+    int value;
+    TreeNode left, right;
+    
+    TreeNode(int value) {
+        this.value = value;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    // Function to build the tree from input
+    public static TreeNode buildTree(String[] nodes) {
+        if (nodes.length == 0 || nodes[0].equals("-1")) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int i = 1;
+
+        while (!queue.isEmpty() && i < nodes.length) {
+            TreeNode current = queue.poll();
+
+            if (i < nodes.length && !nodes[i].equals("-1")) {
+                current.left = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.left);
+            }
+            i++;
+
+            if (i < nodes.length && !nodes[i].equals("-1")) {
+                current.right = new TreeNode(Integer.parseInt(nodes[i]));
+                queue.add(current.right);
+            }
+            i++;
+        }
+
+        return root;
+    }
+
+    // Function to find the LCA of two given nodes
+    public static TreeNode findLCA(TreeNode root, int n1, int n2) {
+        if (root == null) {
+            return null;
+        }
+
+        if (root.value == n1 || root.value == n2) {
+            return root;
+        }
+
+        TreeNode leftLCA = findLCA(root.left, n1, n2);
+        TreeNode rightLCA = findLCA(root.right, n1, n2);
+
+        if (leftLCA != null && rightLCA != null) {
+            return root;
+        }
+
+        return (leftLCA != null) ? leftLCA : rightLCA;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String[] nodes = scanner.nextLine().trim().split(" ");
+        int n1 = scanner.nextInt();
+        int n2 = scanner.nextInt();
+
+        TreeNode root = buildTree(nodes);
+        TreeNode lca = findLCA(root, n1, n2);
+
+        if (lca != null) {
+            System.out.println(lca.value);
+        } else {
+            System.out.println("0");
+        }
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------
+## 7th
+
+import java.util.*;
+
+class TreeNode {
+    int value;
+    TreeNode left, right;
+    
+    TreeNode(int value) {
+        this.value = value;
+        left = right = null;
+    }
+}
+
+public class Main {
+
+    // Function to build the tree from input
+    public static TreeNode buildTree(int[] nodes) {
+        if (nodes.length == 0) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(nodes[0]);
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        int i = 1;
+
+        while (!queue.isEmpty() && i < nodes.length) {
+            TreeNode current = queue.poll();
+
+            if (i < nodes.length && nodes[i] != -1) {
+                current.left = new TreeNode(nodes[i]);
+                queue.add(current.left);
+            }
+            i++;
+
+            if (i < nodes.length && nodes[i] != -1) {
+                current.right = new TreeNode(nodes[i]);
+                queue.add(current.right);
+            }
+            i++;
+        }
+
+        return root;
+    }
+
+    // Function to check if the tree is a BST
+    public static boolean isBST(TreeNode node, Integer min, Integer max) {
+        if (node == null) {
+            return true;
+        }
+
+        if ((min != null && node.value <= min) || (max != null && node.value >= max)) {
+            return false;
+        }
+
+        return isBST(node.left, min, node.value) && isBST(node.right, node.value, max);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int[] nodes = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            nodes[i] = scanner.nextInt();
+        }
+
+        TreeNode root = buildTree(nodes);
+        boolean result = isBST(root, null, null);
+
+        System.out.println(result ? "True" : "False");
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------
+
+## 8th
+
+import java.util.Scanner;
+
+class TreeNode {
+    int key;
+    TreeNode left, right;
+
+    public TreeNode(int item) {
+        key = item;
+        left = right = null;
+    }
+}
+
+class Main {
+    TreeNode root;
+
+    Main() {
+        root = null;
+    }
+
+    void insert(int key) {
+        root = insertRec(root, key);
+    }
+
+    TreeNode insertRec(TreeNode root, int key) {
+        if (root == null) {
+            root = new TreeNode(key);
+            return root;
+        }
+        if (key < root.key)
+            root.left = insertRec(root.left, key);
+        else if (key > root.key)
+            root.right = insertRec(root.right, key);
+
+        return root;
+    }
+
+    int kthSmallest(int k) {
+        int[] count = {0}; // To keep track of the count of nodes visited
+        return kthSmallestRec(root, k, count);
+    }
+
+    int kthSmallestRec(TreeNode root, int k, int[] count) {
+        if (root == null)
+            return -1;
+
+        int left = kthSmallestRec(root.left, k, count);
+        if (left != -1)
+            return left;
+
+        count[0]++;
+        if (count[0] == k)
+            return root.key;
+
+        return kthSmallestRec(root.right, k, count);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Main tree = new Main();
+
+       
+
+        while (true) {
+            int key = scanner.nextInt();
+            if (key == -1) {
+                break;
+            }
+            tree.insert(key);
+        }
+
+        System.out.println("Enter the kth value:");
+        int k = scanner.nextInt();
+
+        int result = tree.kthSmallest(k);
+        System.out.println("Smallest kth value " + result);
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+## 9th
+
+import java.util.Scanner;
+
+class TreeNode {
+    int key;
+    TreeNode left, right;
+
+    public TreeNode(int item) {
+        key = item;
+        left = right = null;
+    }
+}
+
+class Main {
+    TreeNode root;
+
+    Main() {
+        root = null;
+    }
+
+    TreeNode sortedArrayToBST(int[] arr, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+
+        int mid = (start + end) / 2;
+        TreeNode node = new TreeNode(arr[mid]);
+
+        node.left = sortedArrayToBST(arr, start, mid - 1);
+        node.right = sortedArrayToBST(arr, mid + 1, end);
+
+        return node;
+    }
+
+    void preOrder(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+
+        System.out.print(node.key + " ");
+        preOrder(node.left);
+        preOrder(node.right);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int T = scanner.nextInt();
+
+        for (int t = 0; t < T; t++) {
+            int N = scanner.nextInt();
+            int[] arr = new int[N];
+
+            for (int i = 0; i < N; i++) {
+                arr[i] = scanner.nextInt();
+            }
+
+            Main tree = new Main();
+            tree.root = tree.sortedArrayToBST(arr, 0, N - 1);
+            tree.preOrder(tree.root);
+            System.out.println();
+        }
+
+        scanner.close();
+    }
+}
