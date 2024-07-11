@@ -1,34 +1,44 @@
-import java.util.*;
-class Main
-{
-  public static void main(String args[]){
-    Scanner sc = new Scanner(System.in);
-    int n = sc.nextInt();
-    int n1= n/2;
-    int s1 = 0;
-    int[] arr = new int[n];
-    for(int i=0; i<n; i++){
-      arr[i]=sc.nextInt();
-    }
-    if(n%2==0){
-      for(int i=0;i<=n1;i++){
-        if(arr[i] == arr[n-1-i]){
-        s1 = 1;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+       
+        int length = scanner.nextInt();
+        
+        int[] array = new int[length];
+        
+      
+        for (int i = 0; i < length; i++) {
+            array[i] = scanner.nextInt();
         }
-      }
-    }
-    else{
-      for(int i=0;i<=n1-1;i++){
-        if(arr[i] == arr[n-1-i]){
-        s1 = 1;
+        
+        boolean isPalindrome = isArrayPalindrome(array);
+        if(isPalindrome == true){
+          System.out.println("True");
+        }else{
+          System.out.println("False");
         }
-      }
+        
+        scanner.close();
     }
-    if(s1==1){
-    System.out.println("True");
-    }else{
-    System.out.println("False");
+
+    public static boolean isArrayPalindrome(int[] array) {
+        int start = 0;
+        int end = array.length - 1;
+        
+        while (start < end) {
+            if (array[start] != array[end]) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
     }
+}
+
 ####################################
 
 import java.util.Scanner;
