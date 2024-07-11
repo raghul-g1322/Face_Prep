@@ -295,3 +295,41 @@ public class Main
         System.out.println();
     }
 }
+############### REORDER ###################
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+      Scanner scanner = new Scanner(System.in);
+      int size = scanner.nextInt();
+      int[] array = new int[size];
+
+      for (int i = 0; i < size; i++) {
+          array[i] = scanner.nextInt();
+      }
+      int start = 0;
+      int end = array.length - 1;
+      int[] NEWARRAY = new int[size];
+      for(int i = start;i<=end;i++){
+        NEWARRAY[i]=array[end-i];
+      }
+ 
+        for(int i = start ; i<=end ; i++){
+          if(start<end){
+            System.out.print(NEWARRAY[start]+" ");
+            start++;
+            System.out.print(NEWARRAY[end]+" ");
+            end--;
+          }
+        }
+      if(size%2!=0){
+        int n = size/2;
+
+        System.out.print(array[n]);
+      }
+
+        scanner.close();
+    }
+}
+
