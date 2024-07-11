@@ -129,3 +129,83 @@ public class Main {
   }
   
 }
+##########################
+
+import java.util.Scanner;
+
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+
+        ListNode dummy = new ListNode(0);
+        ListNode tail = dummy;
+        
+     
+        while (true) {
+            int val = scanner.nextInt();
+            if (val == -1) break;
+            tail.next = new ListNode(val);
+            tail = tail.next;
+        }
+
+
+        int k = scanner.nextInt();
+
+       
+        ListNode head = dummy.next;
+        head = reverseKGroup(head, k);
+
+        // Print the modified linked list
+        printList(head);
+
+        scanner.close();
+    }
+
+    public static ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null || k == 1) return head;
+
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+
+        ListNode current = dummy, next = dummy, prev = dummy;
+        int count = 0;
+
+        // Count the number of nodes in the linked list
+        while (current.next != null) {
+            current = current.next;
+            count++;
+        }
+
+        // Reverse every k nodes
+        while (count >= k) {
+            current = prev.next;
+            next = current.next;
+            for (int i = 1; i < k; i++) {
+                current.next = next.next;
+                next.next = prev.next;
+                prev.next = next;
+                next = current.next;
+            }
+            prev = current;
+            count -= k;
+        }
+
+        return dummy.next;
+    }
+
+    public static void printList(ListNode head) {
+        ListNode current = head;
+        while (current != null) {
+            System.out.println(current.val);
+            current = current.next;
+        }
+    }
+}
+
